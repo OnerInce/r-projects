@@ -1,0 +1,408 @@
+---
+title: "intro_data_project"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+author: "Öner İnce"
+date: "9/26/2019"
+output: 
+  html_document: 
+    fig_height: 4
+    highlight: pygments
+    theme: spacelab
+---
+
+## Setup
+
+### Load packages
+
+```{r load-packages, message = FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+### Load data
+
+```{r load-data}
+load("brfss2013.RData")
+```
+
+
+* * *
+
+## Part 1: Data
+
+      While gathering data for BRFSS, participants have chosen randomly and surveyed by telephone. Because of that random choosing, we can say random sampling was used. So, all the data that gathered can be generalizable to the population. Besides that, before 2013, only adult people surveyed, so we can say our population is only adults.
+  
+      However, since there is no experiment or experimental-control groups in BFFS -only survey-, we can say that there is no place for random assignment.
+
+
+* * *
+
+## Part 2: Research questions
+
+**Research quesion 1:**
+
+      Is there a correlation between having a cancer and age among males and females? It can be interesting to see the cancer distribution of patients' age and role of the gender factor.
+
+**Research quesion 2:**
+
+      Are Hispanic, Latino/a, or Spanish origin people less tend to be diagnosed with cancer? Also there could be a link with patients' gender. Saw an article about this topic recently and it could be interesting to see the results. (https://www.usatoday.com/story/news/2018/09/29/hispanic-health/1442099002/)
+
+**Research quesion 3:**
+      
+      Is there a correlation between education level and wearing seat belt? Specially, in small ages, school can be an important teaching place for life too. Does it really have an impact on kids?
+
+* * *
+
+## Part 3: Exploratory data analysis
+
+
+**Research quesion 1:**
+          
+    Is there a correlation between having a cancer and age among males and females?
+
+  First gather required data from the dataset. For this question we need 4 variables : 
+    
+    
+*chcscncr: (Ever Told) You Had Skin Cancer?*
+
+*chcocncr: (Ever Told) You Had Any Other Types Of Cancer?*
+
+*X_age80: Imputed Age Value Collapsed Above 80*
+
+*sex: Respondents Sex*
+
+
+  After that, create a new variable "isCancer" to deal with only one variable : 
+  
+```{r}
+
+brfss2013 <- brfss2013 %>% mutate(isCancer = ifelse(chcocncr=="Yes" | chcscncr =="Yes", "Yes","No"))
+
+```
+
+  Then collect data for both genders: 
+
+```{r warning=FALSE}
+
+  male_cancer_age = brfss2013 %>% group_by(X_age80) %>% 
+    filter(sex=="Male", isCancer=="Yes", !is.na(X_age80)) %>%
+    summarise(freq = n())
+  
+  male_cancer_age
+  
+  female_cancer_age = brfss2013 %>% group_by(X_age80) %>%
+    filter(sex=="Female", isCancer=="Yes", !is.na(X_age80)) %>%
+    summarise(freq = n())
+  
+  female_cancer_age
+
+```
+
+  After finishing and storing corresponding data for the question, next step is the calculating the summary statistics. 
+  For this purpose, order the both male and female datasets by frequencies.
+  
+```{r}
+  sorted_male <- male_cancer_age[order(male_cancer_age$freq),]
+  sorted_female <- female_cancer_age[order(female_cancer_age$freq),]
+
+```
+
+```{r}
+str(sorted_male)
+str(sorted_female)
+
+```
+
+Then, get the summary statistics:
+
+```{r}
+  summary(sorted_female)
+  summary(sorted_male)
+
+```
+
+  At this point, it can be seen that, since there are some extreme values in female dataset, range and the skewness of the dataset is much bigger than male dataset. Other than that almost there is no difference between these two datasets. 
+  
+  To ensure this, see the closest ages of both genders to the median value.
+  
+```{r}
+  sorted_female[[1]][which.min(abs(sorted_female$freq - 496.5))]
+  sorted_male[[1]][which.min(abs(sorted_male$freq - 196.0))]
+
+
+```
+  
+  Median age of being diagnosed with cancer is almost identical for both genders. 
+
+
+After finishing with summary statistics, last step is the visualization of the data. For this purpose single scatter plot is the best choice. 
+    But first, create two seperate plots for both genders:
+    
+```{r}
+  ggplot(male_cancer_age, aes(x=X_age80, y=freq)) + geom_point()
+  
+```
+    
+```{r}
+  ggplot(female_cancer_age, aes(x=X_age80, y=freq)) + geom_point()
+```
+
+  Then combine these two plots into a single scatter plot:
+  
+```{r}
+  combine <- ggplot(male_cancer_age, aes(X_age80, freq)) + geom_point(aes(colour = "Male")) + 
+    geom_point(data = female_cancer_age, aes(colour = "Female")) + 
+    scale_colour_manual(values = c("red", "blue"))
+  print(combine)
+```
+  
+  Finally, after some visual changes we're done.
+  
+```{r}
+combine <- combine + labs(x = "Age", y = "Number of Diagnoses")
+combine + theme(
+axis.title.x = element_text(color = "black", size = 14, face = "bold"),
+axis.title.y = element_text(color = "#993333", size = 14, face = "bold")
+)
+
+```
+  
+  Other than scatter plot, histogram can be good choice also : 
+  
+```{r}
+  m <- ggplot(male_cancer_age, aes(x=X_age80, y = freq)) + geom_col(color="darkblue", fill="lightblue")
+  m <- m + labs(x = "Age", y = "Number of Diagnoses")
+  m + theme(
+axis.title.x = element_text(color = "black", size = 14, face = "bold"),
+axis.title.y = element_text(color = "#993333", size = 14, face = "bold")
+)
+
+```
+
+```{r}
+  m <- ggplot(female_cancer_age, aes(x=X_age80, y = freq)) + geom_col(color="darkred", fill="firebrick1")
+  m <- m + labs(x = "Age", y = "Number of Diagnoses")
+  m + theme(
+axis.title.x = element_text(color = "black", size = 14, face = "bold"),
+axis.title.y = element_text(color = "#993333", size = 14, face = "bold")
+)
+
+```
+  
+  With both plots we can easily see the same results. 
+  
+  * After age of 50, there is a huge increase of the risk of cancer
+  * Gender isn't a significant factor in cancer. 
+  * There is a huge difference between age of 80 and before 80. A person is more likely to be diagnosed with a cancer after age of 80.
+  
+**Research quesion 2:**
+
+    Are Hispanic, Latino/a, or Spanish origin people less tend to be diagnosed with cancer? Also there could be a link with patients' gender.
+
+  First gather required data from the dataset. For this question we need 4 variables : 
+  
+
+*X_hispanc: Hispanic, Latino/A, Or Spanish Origin Calculated Variable*
+
+*chcscncr: (Ever Told) You Had Skin Cancer?*
+
+*chcocncr: (Ever Told) You Had Any Other Types Of Cancer?*
+
+(Instead of these two, will use "isCancer" variable which created in previous question)
+
+*sex: Respondents Sex*
+  
+
+
+  Find the total number of Hispanic and not Hispanic people: 
+
+```{r warning=FALSE}
+
+  brfss2013 %>% group_by(X_hispanc) %>% 
+    filter(!is.na(X_hispanc)) %>% summarise(freq = n())
+
+```
+
+  Then, find the number of people who diagnosed with cancer among these 2 groups : 
+  
+```{r warning=FALSE}
+
+  brfss2013 %>% group_by(X_hispanc) %>% 
+    filter(isCancer =="Yes", !is.na(X_hispanc)) %>% summarise(freq = n())
+
+```
+
+  To see is there difference between Hispanic and not-Hispanic people about cancer, see the ratio of among two groups : 
+  
+```{r}
+
+2141 / 37062
+
+79743 / 449274
+
+```
+  
+  Ratio for the not-Hispanic people is 3 times more. We can say that Hispanic people are 3 times less likely to be diagnosed with cancer. But continue to see that is there link with gender factor too. 
+  
+  First, start with females : 
+  
+```{r warning=FALSE}
+  brfss2013 %>% group_by(X_hispanc) %>% 
+    filter(sex=="Female", !is.na(X_hispanc)) %>% summarise(freq = n())
+  
+  brfss2013 %>% group_by(X_hispanc) %>% 
+    filter(sex=="Female", isCancer =="Yes", !is.na(X_hispanc)) %>% summarise(freq = n())
+  
+```
+    
+  Ratio for females : 
+  
+```{r}
+  1442 / 21775
+  49166 / 265775
+
+```
+  
+  It is almost the same (3 times) result with the overall ratio. 
+  
+  And males : 
+  
+```{r warning=FALSE}
+
+  brfss2013 %>% group_by(X_hispanc) %>% 
+    filter(sex=="Male", !is.na(X_hispanc)) %>% summarise(freq = n())
+  
+  brfss2013 %>% group_by(X_hispanc) %>% 
+    filter(sex=="Male", isCancer =="Yes", !is.na(X_hispanc)) %>% summarise(freq = n())
+
+```
+  
+```{r}
+
+699 / 15287
+30577 / 183499
+
+```
+  
+  Again it is very close to the other results. We can say that gender is not a significant factor. 
+  
+  See this results in pie charts :
+  
+```{r warning=FALSE}
+
+  h1 <- brfss2013 %>% group_by(isCancer) %>% 
+    filter(X_hispanc == "Hispanic, Latino/a, or Spanish origin", !is.na(X_hispanc), !is.na(isCancer)) %>% 
+    summarise(freq = n()) %>% mutate(pct = freq/sum(freq) * 100)
+  
+  pie = ggplot(h1, aes(x="", y=pct/100, fill=isCancer)) + geom_bar(stat="identity", width=1)
+  
+  pie = pie + coord_polar("y", start=0) + 
+    geom_text(aes(label = paste0(round(pct), "%")), position = position_stack(vjust = 0.5))
+  
+  pie = pie + scale_fill_manual(values=c("#F26419", "#999999"))
+  
+  pie = pie + labs(x = NULL, y = NULL, fill = NULL, title = "Hispanic People - Having Cancer")
+  
+  pie = pie + theme_classic() + theme(axis.line = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(hjust = 0.5, color = "#666666"))
+  
+  print(pie)
+
+```
+
+```{r warning=FALSE}
+
+  h2 <- brfss2013 %>% group_by(isCancer) %>% 
+    filter(X_hispanc == "Not of Hispanic, Latino/a, or Spanish origin", !is.na(X_hispanc), !is.na(isCancer)) %>% 
+    summarise(freq = n()) %>% mutate(pct = freq/sum(freq) * 100)
+  
+  pie = ggplot(h2, aes(x="", y=pct/100, fill=isCancer)) + geom_bar(stat="identity", width=1)
+  
+  pie = pie + coord_polar("y", start=0) + 
+    geom_text(aes(label = paste0(round(pct), "%")), position = position_stack(vjust = 0.5))
+  
+  pie = pie + scale_fill_manual(values=c("#F26419", "#999999"))
+  
+  pie = pie + labs(x = NULL, y = NULL, fill = NULL, title = "Not Hispanic People - Having Cancer")
+  
+  pie = pie + theme_classic() + theme(axis.line = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(hjust = 0.5, color = "#666666"))
+  
+  print(pie)
+
+```
+  
+  - Having hispanic genes have an impact on having cancer.
+  - However, gender isn't a factor other than genetics.
+  - Reason of this result may not be general to the all Hispanic people around the world.
+  - Hispanic people who live in U.S., may have different life conditions than other contries' Latino people.
+  
+
+**Research quesion 3:**
+
+     Is there a correlation between education level and wearing seat belt?
+
+First gather required data from the dataset. For this question we need 2 variables :
+
+
+*X_rfseat2: Always or Nearly Always Wear Seat Belts Calculated Variable*
+
+*educa: What is the highest grade or year of school you completed?*
+
+
+
+```{r warning=FALSE}
+
+combine <- brfss2013 %>% group_by(X_rfseat2, educa) %>% filter(!is.na(X_rfseat2),!is.na(educa)) %>% 
+summarise(count=n()) %>% mutate(pct = count / sum(count) * 100)
+
+combine <- combine %>% mutate(belt = ifelse(X_rfseat2 == "Always or almost always wear seat belt", "yes", "no"))
+print(combine)
+```
+
+See this results better with a bar chart : 
+
+```{r}
+p = ggplot(combine, aes(x=forcats::fct_relabel(educa,stringr::str_wrap, width = 10), y = pct, fill=belt)) + 
+  geom_col(position=position_dodge())
+print(p)
+
+```
+
+Put percentages on chart and add chart title with legend: 
+
+```{r}
+p = p + geom_text(aes(label=paste0(round(pct), "%"), family = "serif"), vjust=1.6, color="white",
+                  position = position_dodge(0.9), size=4.0) + 
+  theme_minimal() + 
+  scale_fill_brewer(palette="Dark2") + 
+  labs(title = "Education Level - Seat Belt", fill = "Wearing \n Belt?")
+print(p)
+```
+
+Lastly customize the theme and add axis titles : 
+
+```{r warning=FALSE}
+p = p + theme(
+  plot.title = element_text(family = "mono", face="bold.italic", hjust = 0.5, color = "#666666"), 
+  axis.title.x = element_text(family = "mono", color="blue", size=12, face="bold"), 
+  axis.title.y = element_text(family = "mono", color="blue", size=12, face="bold")
+              ) + xlab("Education Level") + ylab("Percentage")
+print(p)
+
+```
+
+To sum up:
+
+ - When education level going up, people are more tend to wear seat belts.
+ - However, among High School graduates, not wearing seat belts is more popular. 
+ - It is very clear that wearing seat belt percentages are going up with education level.
+ - This means that, educated people are more aware of the consequences of not wearing seat belts.
