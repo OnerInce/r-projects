@@ -7,7 +7,12 @@
 
 This is the repository of my R projects. Projects are from Duke University's Statistics with R Specialization. 
 
-**HTML versions of RMD files can be found at https://onerince.github.io/r-projects/ .**
+## 🎈 Usage <a name = "usage"></a>
+
+Download the dataset of the project alongside with Markdown File or .R file. Open the required file with RStudio and follow instructions written in Markdown file.
+
+
+**RMD files and source codes of each project can be found at its folder.**
 
 <h3>Projects : </h3>
 
