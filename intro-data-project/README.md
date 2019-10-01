@@ -37,33 +37,33 @@ load("brfss2013.RData")
 
 ## Part 1: Data
 
-      While gathering data for BRFSS, participants have chosen randomly and surveyed by telephone. Because of that random choosing, we can say random sampling was used. So, all the data that gathered can be generalizable to the population. Besides that, before 2013, only adult people surveyed, so we can say our population is only adults.
+  While gathering data for BRFSS, participants have chosen randomly and surveyed by telephone. Because of that random choosing, we can say random sampling was used. So, all the data that gathered can be generalizable to the population. Besides that, before 2013, only adult people surveyed, so we can say our population is only adults.
   
-      However, since there is no experiment or experimental-control groups in BFFS -only survey-, we can say that there is no place for random assignment.
+  However, since there is no experiment or experimental-control groups in BFFS -only survey-, we can say that there is no place for random assignment.
 
 
 * * *
 
 ## Part 2: Research questions
 
-**Research quesion 1:**
+**Research question 1:**
 
-      Is there a correlation between having a cancer and age among males and females? It can be interesting to see the cancer distribution of patients' age and role of the gender factor.
+  Is there a correlation between having a cancer and age among males and females? It can be interesting to see the cancer distribution of patients' age and role of the gender factor.
 
-**Research quesion 2:**
+**Research question 2:**
 
-      Are Hispanic, Latino/a, or Spanish origin people less tend to be diagnosed with cancer? Also there could be a link with patients' gender. Saw an article about this topic recently and it could be interesting to see the results. (https://www.usatoday.com/story/news/2018/09/29/hispanic-health/1442099002/)
+  Are Hispanic, Latino/a, or Spanish origin people less tend to be diagnosed with cancer? Also there could be a link with patients' gender. Saw an article about this topic recently and it could be interesting to see the results. (https://www.usatoday.com/story/news/2018/09/29/hispanic-health/1442099002/)
 
-**Research quesion 3:**
+**Research question 3:**
       
-      Is there a correlation between education level and wearing seat belt? Specially, in small ages, school can be an important teaching place for life too. Does it really have an impact on kids?
+  Is there a correlation between education level and wearing seat belt? Specially, in small ages, school can be an important teaching place for life too. Does it really have an impact on kids?
 
 * * *
 
 ## Part 3: Exploratory data analysis
 
 
-**Research quesion 1:**
+**Research question 1:**
           
     Is there a correlation between having a cancer and age among males and females?
 
@@ -298,7 +298,7 @@ axis.title.y = element_text(color = "#993333", size = 14, face = "bold")
   * Gender isn't a significant factor in cancer. 
   * There is a huge difference between age of 80 and before 80. A person is more likely to be diagnosed with a cancer after age of 80.
   
-**Research quesion 2:**
+**Research question 2:**
 
     Are Hispanic, Latino/a, or Spanish origin people less tend to be diagnosed with cancer? Also there could be a link with patients' gender.
 
@@ -526,7 +526,7 @@ axis.title.y = element_text(color = "#993333", size = 14, face = "bold")
   - Hispanic people who live in U.S., may have different life conditions than other contries' Latino people.
   
 
-**Research quesion 3:**
+**Research question 3:**
 
      Is there a correlation between education level and wearing seat belt?
 
