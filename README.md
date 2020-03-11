@@ -17,3 +17,5 @@ Download the dataset of the project alongside with Markdown File or .R file. Ope
 <h3>Projects : </h3>
 
 - **intro_data_project** : Using "The Behavioral Risk Factor Surveillance System (BRFSS)" data, come up with 3 research questions and analyze these questions with summary statistics and plots. 
+
+- **stat_inf_project** : Using the General Social Survey (GSS) dataset, identify a research question and conduct hypothesis test to verify this research question.
