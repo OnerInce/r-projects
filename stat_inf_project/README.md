@@ -105,7 +105,7 @@ govt_op_dist <- gss %>% group_by(helpnot) %>%
   print(pie)
 ```
 
-![](C:/Users/oneri/Documents/row_z/docs/index_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 Now, let's investigate the other variable, family income level. 
 
@@ -148,7 +148,7 @@ p
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![](C:/Users/oneri/Documents/row_z/docs/index_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 Unlike the other variable, helpnot, this variable has a non-normal distribution and right-skewed. Also it includes numbers from a very wide range.
 
