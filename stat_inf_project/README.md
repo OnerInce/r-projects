@@ -217,11 +217,11 @@ For this purpose I will use two variables; *helpnot* and *coninc* which I invest
 
 x ---> average family income of the corresponding opinion group.
 
-> H~0~ : x~govtdoestoomuch~ = x~govtshoulddomore~
+> H<sub>0</sub> : x<sub>govtdoestoomuch</sub> = x<sub>govtshoulddomore</sub>
 
 Null hypotehesis says, there is nothing unusual going on, average family income of both opinion groups is equal.
 
-> H~A~ : x~govtdoestoomuch~ != x~govtshoulddomore~
+> H<sub>A</sub> : x<sub>govtdoestoomuch</sub> != x<sub>govtshoulddomore</sub>
 
 Alternative hypotehesis says, there is something going on, average family income is not equal for both opinion groups.
 
@@ -237,20 +237,19 @@ Since, this survey conducted via face-to-face interviews and participants have c
 
 Both of our opinion groups have close number of people, so this condition is met too.
 
-
 Now, will try to make a statistical inference with comparing two independent means using t-score. For this purpose, Confidence Interval will be used.
 
 Confidence interval formula is :
 
-$$CI = (x_1 − x_2) ± t ⋆ dfSE$$
+<img src="https://render.githubusercontent.com/render/math?math={CI:}~\bar{x}_{diff} \pm t^\star_{df} SE">
 
 standard error : 
 
-$$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}$$
+<img src="https://render.githubusercontent.com/render/math?math=SE = \sqrt{{\frac{s_1^2}{n_1}} %2B {\frac{s_2^2}{n_2}}}">
 
 degrees of freedom : 
 
-$$df = min(n_1 - 1, n_2 - 1)$$
+<img src="https://render.githubusercontent.com/render/math?math=df = min(n_1 - 1, n_2 - 1)">
 
 These are the all formulas needed. Start with degrees of freedom ;
 
@@ -272,13 +271,11 @@ family_income_both
 ## 3 Govt Does Too Much  4137 52161. 39619.
 ```
 
-Using this table; $$n_1 = 4061$$ and $$n_2 = 4137$$
+<img src="https://render.githubusercontent.com/render/math?math=n_1 = 4061"> and <img src="https://render.githubusercontent.com/render/math?math=n_2 = 4137">
 
-$$df = min(4060, 4136) = 4060$$
+<img src="https://render.githubusercontent.com/render/math?math=df = min(4060, 4136) = 4060">
 
 Now, we have degrees of freedom value. Next step is to calculate the T score and critical value. Will use %95 confidence interval. Since our hypothesis are equal and not equal, two tail area is what is needed : 
-
-
 
 ```r
 qt(0.025, df = 4060)
@@ -290,21 +287,21 @@ qt(0.025, df = 4060)
 
 From confidence interval formula ;
 
-$$CI = (x_1 − x_2) ± t ⋆ dfSE$$
-$$CI = (33281 − 52161) ± 1.96 * SE$$
+<img src="https://render.githubusercontent.com/render/math?math={CI:}~\bar{x}_{diff} \pm t^\star_{df} \times SE">
+<img src="https://render.githubusercontent.com/render/math?math={CI:}{33281 - 52161} \pm 1.96 \times SE">
+
 And standard error is :
+<img src="https://render.githubusercontent.com/render/math?math=SE = \sqrt{\frac{s_{1}^2}{n_1} %2B \frac{s_{2}^2}{n_{2}}}">
+<img src="https://render.githubusercontent.com/render/math?math=SE = \sqrt{\frac{30505^2}{4061} %2B \frac{39619^2}{4137}} = 780.10 \approx 780">
 
-$$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}$$
-$$SE = \sqrt{\frac{30505^2}{4061} + \frac{39619^2}{4137}} = 780.10≈780$$
 So, confidence interval becomes :
-
-$$CI = (33281 − 52161) ± 1.96 * 780 = -18880 ± 1528 = (-20408, -17352)$$
+<img src="https://render.githubusercontent.com/render/math?math={CI:}{33281 - 52161} \pm 1.96 \times 780 = -18880 \pm 1528 = (-20408, -17352)">
 
 This interval means that ; **those who think "government should do even more to solve country's problems" earns less $20408 to $17352 than those who think "government in Washington is trying to do too many things that should be left to individuals and private businesses", on average.**
 
 Now test our hypothesis. To test it, we need to find the T-score first.
 
-$$T_{df}=\frac{(x_1−x_2)−(μ_1−μ_2)}{SE} = \frac{(33281−52161)−(0−0)}{780} = \frac{-18880}{780} = -24.20$$
+<img src="https://render.githubusercontent.com/render/math?math=T_{df} = \frac{(\bar{x}_{1} - \bar{x}_{2}) - (\mu_{1} - \mu_{2})}{SE} = \frac{({33281} - {52161}) - (0 - 0)}{780} = \frac{-18880}{780} = -24.20">
 
 Last step when testing hypothesis is, finding the p value : 
 
@@ -320,7 +317,7 @@ pt(24.20, df = 4060, lower.tail = FALSE) * 2
 
 Null hypothesis was :
 
-> H~0~ : x~govtdoestoomuch~ = x~govtshoulddomore~
+> H<sub>0</sub> : x<sub>govtdoestoomuch</sub> = x<sub>govtshoulddomore</sub>
 
 Null hypotehesis says, there is nothing unusual going on, average family income of both opinion groups is equal.
 
